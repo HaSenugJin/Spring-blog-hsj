@@ -41,4 +41,15 @@ public class BoardNativeRepository {
         query.setParameter(1, id);
         query.executeUpdate();
     }
+
+    @Transactional
+    public void update(Integer id, String username, String title, String content) {
+        Query query = em.createNativeQuery("update board_tb set title = ?, content = ?, username = ? where id = ?");
+        query.setParameter(1, title);
+        query.setParameter(2, content);
+        query.setParameter(3, username);
+        query.setParameter(4, id);
+        query.executeUpdate();
+
+    }
 }

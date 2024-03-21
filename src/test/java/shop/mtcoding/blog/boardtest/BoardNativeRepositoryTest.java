@@ -51,4 +51,23 @@ public class BoardNativeRepositoryTest {
         List<Board> boardList = boardNativeRepository.findAll();
         Assertions.assertThat(boardList.size()).isEqualTo(3);
     }
+
+    @Test
+    public void update_test(){
+        // given
+        int id = 1;
+        String title = "제목수정1";
+        String content = "내용수정1";
+        String username = "bori";
+
+        // when
+        boardNativeRepository.update(id, username, title, content);
+
+        // then
+        Board board = boardNativeRepository.findById(id);
+        System.out.println("updateById_test/board : " + board);
+        Assertions.assertThat(board.getTitle()).isEqualTo("제목수정1");
+        Assertions.assertThat(board.getContent()).isEqualTo("내용수정1");
+        Assertions.assertThat(board.getUsername()).isEqualTo("bori");
+    }
 }
