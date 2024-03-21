@@ -28,4 +28,10 @@ public class BoardNativeRepository {
 
         return query.getResultList();
     }
+
+    public Board findById(Integer id) {
+        Query query = em.createNativeQuery("select * from board_tb where id = ?", Board.class);
+        query.setParameter(1, id);
+        return (Board) query.getSingleResult();
+    }
 }

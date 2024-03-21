@@ -28,4 +28,15 @@ public class BoardNativeRepositoryTest {
         Assertions.assertThat(boardList.size()).isEqualTo(4);
         Assertions.assertThat(boardList.get(2).getUsername()).isEqualTo("ssar");
     }
+
+
+    @Test
+    public void findById_test() {
+        int id = 1;
+
+        Board board = boardNativeRepository.findById(id);
+
+        System.out.println("findById_test/getUsername : " + board.getUsername());
+
+    }
 }
