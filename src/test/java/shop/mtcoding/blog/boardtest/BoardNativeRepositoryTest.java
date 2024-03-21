@@ -39,4 +39,16 @@ public class BoardNativeRepositoryTest {
         System.out.println("findById_test/getUsername : " + board.getUsername());
 
     }
+
+    @Test
+    public void deleteById_test(){
+        // given
+        int id = 1;
+
+        // when
+        boardNativeRepository.deleteById(id);
+
+        List<Board> boardList = boardNativeRepository.findAll();
+        Assertions.assertThat(boardList.size()).isEqualTo(3);
+    }
 }
