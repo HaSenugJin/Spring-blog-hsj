@@ -3,9 +3,13 @@ package shop.mtcoding.blog.controller.user;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import shop.mtcoding.blog._core.errors.exception.Exception400;
+import shop.mtcoding.blog._core.errors.exception.Exception401;
 
 @RequiredArgsConstructor
 @Controller
@@ -40,20 +44,22 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(UserRequest.LoginDTO reqDTO) {
-        User sessionUser = userRepository.findByUsernameAndPassword(reqDTO);
-
-        if (sessionUser == null) {
-            return "redirect:/login-form";
+        try {
+            User sessionUser = userRepository.findByUsernameAndPassword(reqDTO);
+            session.setAttribute("sessionUser", sessionUser);
+        } catch (EmptyResultDataAccessException e) {
+            throw new Exception401("유저아이디 혹은 비밀번호가 잘못되었습니다.");
         }
-
-        session.setAttribute("sessionUser", sessionUser);
         return "redirect:/";
     }
 
     @PostMapping("/join")
     public String join(UserRequest.JoinDTO reqDTO) {
-        User sessionUser = userRepository.save(reqDTO.toEntity());
-        session.setAttribute("sessionUser", sessionUser);
+        try {
+            userRepository.save(reqDTO.toEntity());
+        } catch (DataIntegrityViolationException e) {
+            throw new Exception400("동일한 유저네임이 존재합니다.");
+        }
         return "redirect:/";
     }
 
@@ -63,5 +69,4 @@ public class UserController {
         userRepository.UpdateById(sessionUser.getId(), reqDTO);
         return "redirect:/";
     }
-
 }
