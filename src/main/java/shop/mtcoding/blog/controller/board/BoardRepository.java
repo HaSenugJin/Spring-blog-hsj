@@ -5,6 +5,8 @@ import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Repository
 public class BoardRepository {
@@ -19,5 +21,10 @@ public class BoardRepository {
         Query query = em.createQuery("select b from Board b join fetch b.user u where b.id = :id", Board.class);
         query.setParameter("id", id);
         return (Board) query.getSingleResult();
+    }
+
+    public List<Board> findAll() {
+        Query query = em.createQuery("select b from Board b order by b.id desc", Board.class);
+        return query.getResultList();
     }
 }
