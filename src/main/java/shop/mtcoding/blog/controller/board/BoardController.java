@@ -34,7 +34,7 @@ public class BoardController {
 
     @GetMapping("/board/{id}/update-form")
     public String updateForm(@PathVariable Integer id, HttpServletRequest request){
-        Board board = boardPersistRepository.findById(id);
+        Board board = boardRepository.findById(id);
         request.setAttribute("board", board);
         return "board/update-form";
     }
@@ -63,7 +63,7 @@ public class BoardController {
 
     @PostMapping("/board/{id}/update")
     public String update(@PathVariable Integer id, BoardRequest.UpdateDTO reqDTO) {
-        boardPersistRepository.updateById(id, reqDTO);
+        boardRepository.updateById(id, reqDTO.getTitle(), reqDTO.getContent());
 
 
         return "redirect:/board/"+id;

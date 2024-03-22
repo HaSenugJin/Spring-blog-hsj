@@ -22,6 +22,5 @@ public class BoardRequest {
     public static class UpdateDTO {
         private String title;
         private String content;
-        private String username;
     }
 }

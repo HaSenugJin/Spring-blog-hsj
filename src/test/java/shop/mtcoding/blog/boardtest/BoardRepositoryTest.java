@@ -1,5 +1,6 @@
 package shop.mtcoding.blog.boardtest;
 
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -14,6 +15,9 @@ import java.util.List;
 public class BoardRepositoryTest {
     @Autowired
     private BoardRepository boardRepository;
+
+    @Autowired
+    private EntityManager em;
 
     @Test
     public void findById_test() {
@@ -58,5 +62,20 @@ public class BoardRepositoryTest {
 
         // then
         System.out.println(boardRepository.findAll().size());
+    }
+
+    @Test
+    public void updateById_test(){
+        // given
+        int id = 1;
+        String title = "새제목";
+        String content = "새내용";
+
+        // when
+        boardRepository.updateById(id, title, content);
+        em.flush();
+
+        // then
+        System.out.println(boardRepository.findById(id));
     }
 }
