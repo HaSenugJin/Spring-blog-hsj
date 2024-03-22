@@ -33,4 +33,11 @@ public class BoardRepository {
     public void save(Board board) {
         em.persist(board);
     }
+
+    @Transactional
+    public void deleteById(Integer id) {
+        Query query = em.createQuery("delete from Board b where b.id = :id");
+        query.setParameter("id", id);
+        query.executeUpdate();
+    }
 }

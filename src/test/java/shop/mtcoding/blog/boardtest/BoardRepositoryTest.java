@@ -47,4 +47,16 @@ public class BoardRepositoryTest {
 
         // then
     }
+
+    @Test
+    public void deleteById_test(){
+        // given
+        int id = 1;
+
+        // when
+        boardRepository.deleteById(id);
+
+        // then
+        System.out.println(boardRepository.findAll().size());
+    }
 }
