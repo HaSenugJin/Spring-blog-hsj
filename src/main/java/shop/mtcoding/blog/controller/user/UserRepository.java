@@ -9,7 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Repository
 public class UserRepository {
+
     private final EntityManager em;
+
+    public User findById(Integer id) {
+        User user = em.find(User.class, id);
+        return user;
+    }
 
     @Transactional
     public User findByUsernameAndPassword(UserRequest.LoginDTO reqDTO) {
@@ -25,4 +31,13 @@ public class UserRepository {
         em.persist(user);
         return user;
     }
+
+    @Transactional
+    public User UpdateById(Integer id, UserRequest.UpdateDTO reqDTO) {
+        User user = findById(id);
+        user.setPassword(reqDTO.getPassword());
+        user.setEmail(reqDTO.getEmail());
+        return user;
+    }
+
 }
