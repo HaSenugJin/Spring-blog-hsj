@@ -19,4 +19,10 @@ public class UserRepository {
 
         return (User) query.getSingleResult();
     }
+
+    @Transactional
+    public User save(User user) {
+        em.persist(user);
+        return user;
+    }
 }

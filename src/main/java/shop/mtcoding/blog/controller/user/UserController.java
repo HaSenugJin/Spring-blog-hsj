@@ -45,4 +45,11 @@ public class UserController {
         session.setAttribute("sessionUser", sessionUser);
         return "redirect:/";
     }
+
+    @PostMapping("/join")
+    public String join(UserRequest.JoinDTO reqDTO) {
+        User sessionUser = userRepository.save(reqDTO.toEntity());
+        session.setAttribute("sessionUser", sessionUser);
+        return "redirect:/";
+    }
 }
