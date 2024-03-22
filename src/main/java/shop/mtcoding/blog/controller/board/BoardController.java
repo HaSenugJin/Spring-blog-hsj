@@ -14,6 +14,7 @@ import java.util.List;
 public class BoardController {
 
     private final BoardPersistRepository boardPersistRepository;
+    private final BoardRepository boardRepository;
 
     @GetMapping("/")
     public String index(HttpServletRequest request) {
@@ -37,7 +38,7 @@ public class BoardController {
 
     @GetMapping("/board/{id}")
     public String detail(@PathVariable Integer id, HttpServletRequest request) {
-        Board board = boardPersistRepository.findById(id);
+        Board board = boardRepository.findByIdJoinUser(id);
         request.setAttribute("board", board);
         return "board/detail";
     }

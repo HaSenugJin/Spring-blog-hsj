@@ -39,6 +39,5 @@ public class BoardPersistRepository {
     @Transactional
     public void updateById(int id, BoardRequest.UpdateDTO reqDTO) {
         Board board = findById(id);
-        board.update(reqDTO);
     }
 }
