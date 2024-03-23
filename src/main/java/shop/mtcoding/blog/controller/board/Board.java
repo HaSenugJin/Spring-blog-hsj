@@ -5,9 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import shop.mtcoding.blog.controller.reply.Reply;
 import shop.mtcoding.blog.controller.user.User;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @Data
@@ -29,6 +32,10 @@ public class Board {
 
     @Transient
     private Boolean isOwner;
+
+    @OrderBy("id desc")
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE) // Entity 객체의 변수명 == FK의 주인
+    private List<Reply> replies = new ArrayList<>();
 
     @Builder
     public Board(Integer id, String title, String content, User user, Timestamp createdAt) {
