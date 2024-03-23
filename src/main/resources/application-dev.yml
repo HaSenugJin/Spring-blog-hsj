@@ -3,6 +3,9 @@ server:
     encoding:
       charset: utf-8
       force: true
+    # url rewrite 문제 해결
+    session:
+      tracking-modes: cookie
   port: 8080
 
 spring:
@@ -28,5 +31,6 @@ spring:
     show-sql: true
     properties:
       hibernate:
+        format_sql: true
         default_batch_fetch_size: 10
     defer-datasource-initialization: true

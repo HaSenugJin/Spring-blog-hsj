@@ -32,8 +32,8 @@ public class BoardService {
             throw new Exception403("게시글을 수정할 권한이 없습니다.");
         }
 
-        board.setTitle(board.getTitle());
-        board.setContent(board.getContent());
+        board.setTitle(reqDTO.getTitle());
+        board.setContent(reqDTO.getContent());
     }
 
     public Board updateForm(Integer boardId, Integer sessionUserId) {
