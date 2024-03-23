@@ -27,10 +27,8 @@ public class Board {
     @CreationTimestamp
     private Timestamp createdAt;
 
-    public Board(String title, String content) {
-        this.title = title;
-        this.content = content;
-    }
+    @Transient
+    private Boolean isOwner;
 
     @Builder
     public Board(Integer id, String title, String content, User user, Timestamp createdAt) {

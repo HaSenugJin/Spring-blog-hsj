@@ -17,13 +17,13 @@ import java.util.List;
 @Controller
 public class BoardController {
 
-    private final BoardPersistRepository boardPersistRepository;
     private final BoardRepository boardRepository;
     private final HttpSession session;
+    private final BoardService boardService;
 
     @GetMapping("/")
     public String index(HttpServletRequest request) {
-        List<Board> boardList = boardRepository.findAll();
+        List<Board> boardList = boardService.findAll();
         request.setAttribute("boardList", boardList);
         return "index";
     }
@@ -35,11 +35,9 @@ public class BoardController {
     }
 
     @GetMapping("/board/{id}/update-form")
-    public String updateForm(@PathVariable Integer id, HttpServletRequest request){
-        Board board = boardRepository.findById(id);
-        if (board == null) {
-            throw new Exception404("해당 게시글을 찾을 수 없습니다.");
-        }
+    public String updateForm(@PathVariable Integer id, HttpServletRequest request) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        Board board = boardService.updateForm(id, sessionUser.getId());
         request.setAttribute("board", board);
         return "board/update-form";
     }
@@ -47,16 +45,8 @@ public class BoardController {
     @GetMapping("/board/{id}")
     public String detail(@PathVariable Integer id, HttpServletRequest request) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        Board board = boardRepository.findByIdJoinUser(id);
+        Board board = boardService.findByJoinUser(id, sessionUser);
 
-        boolean isOwner = false;
-        if (sessionUser != null) {
-            if (sessionUser.getId() == board.getUser().getId()) {
-                isOwner = true;
-            }
-        }
-
-        request.setAttribute("isOwner", isOwner);
         request.setAttribute("board", board);
 
         return "board/detail";
@@ -65,7 +55,7 @@ public class BoardController {
     @PostMapping("/board/save")
     public String save(BoardRequest.saveDTO reqDTO) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        boardRepository.save(reqDTO.toEntity(sessionUser));
+        boardService.save(reqDTO, sessionUser);
 
         return "redirect:/";
     }
@@ -73,26 +63,14 @@ public class BoardController {
     @PostMapping("/board/{id}/delete")
     public String delete(@PathVariable Integer id) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        Board board = boardRepository.findById(id);
-
-        if (sessionUser.getId() != board.getUser().getId()) {
-            throw new Exception403("게시글을 삭제할 권한이 없습니다.");
-        }
-
-        boardRepository.deleteById(id);
+        boardService.delete(id, sessionUser.getId());
         return "redirect:/";
     }
 
     @PostMapping("/board/{id}/update")
     public String update(@PathVariable Integer id, BoardRequest.UpdateDTO reqDTO) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        Board board = boardRepository.findById(id);
-
-        if (sessionUser.getId() != board.getUser().getId()) {
-            throw new Exception403("게시글을 수정할 권한이 없습니다.");
-        }
-
-        boardRepository.updateById(id, reqDTO.getTitle(), reqDTO.getContent());
-        return "redirect:/board/"+id;
+        boardService.update(id, sessionUser.getId(), reqDTO);
+        return "redirect:/board/" + id;
     }
 }
