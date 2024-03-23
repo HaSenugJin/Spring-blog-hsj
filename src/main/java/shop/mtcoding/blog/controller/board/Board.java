@@ -31,7 +31,7 @@ public class Board {
     private Timestamp createdAt;
 
     @Transient
-    private Boolean isOwner;
+    private Boolean isBoardOwner;
 
     @OrderBy("id desc")
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE) // Entity 객체의 변수명 == FK의 주인
